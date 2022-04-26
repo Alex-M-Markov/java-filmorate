@@ -15,22 +15,27 @@ import java.util.Map;
 @Slf4j
 public class FilmController {
     private final Map<Integer, Film> films = new HashMap<>();
-    private static int filmIdCounter = 0;
+    public static int filmIdCounter = 1;
 
-    @PostMapping("/film")
+    public static int getFilmIdCounter() {
+        return filmIdCounter;
+    }
+
+    @PostMapping("/films")
     public Film create(@Valid @RequestBody Film film) {
         log.info("Received request for a new film");
-        films.put(filmIdCounter++, film);
+        films.put(film.getId(), film);
+        filmIdCounter++;
         return film;
     }
 
-    @PutMapping("/film")
-    public Film update(@Valid @RequestBody Integer id, @RequestBody Film film) {
-        if (!films.containsKey(id)) {
+    @PutMapping("/films")
+    public Film update(@Valid @RequestBody Film film) {
+        if (!films.containsKey(film.getId())) {
             throw new InputMismatchException("Entry does not exist");
         }
         log.info("Received request for a film update");
-        films.put(id, film);
+        films.put(film.getId(), film);
         return film;
     }
 

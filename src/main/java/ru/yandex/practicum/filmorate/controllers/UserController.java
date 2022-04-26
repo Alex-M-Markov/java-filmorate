@@ -15,22 +15,27 @@ import java.util.Map;
 @Slf4j
 public class UserController {
     private final Map<Integer, User> users = new HashMap<>();
-    private static int userIdCounter = 0;
+    private static int userIdCounter = 1;
 
-    @PostMapping("/user")
-    public User create(@Valid @RequestBody User user) {
-        log.info("Received request for a new user");
-        users.put(userIdCounter++, user);
-                return user;
+    public static int getUserIdCounter() {
+        return userIdCounter;
     }
 
-    @PutMapping("/user")
-    public User update(@Valid @RequestBody Integer id, @RequestBody User user) {
-        if (!users.containsKey(id)) {
+    @PostMapping("/users")
+    public User create(@Valid @RequestBody User user) {
+        log.info("Received request for a new user");
+        users.put(user.getId(), user);
+        userIdCounter++;
+        return user;
+    }
+
+    @PutMapping("/users")
+    public User update(@Valid @RequestBody User user) {
+        if (!users.containsKey(user.getId())) {
             throw new InputMismatchException("Entry does not exist");
         }
         log.info("Received request for a user update");
-        users.put(id, user);
+        users.put(user.getId(), user);
         return user;
     }
 

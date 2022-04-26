@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import ru.yandex.practicum.filmorate.controllers.UserController;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 @ToString
 @EqualsAndHashCode
 public class User {
+    private Integer id;
     @Email(message = "Use a valid e-mail address")
     private String email;
     @NotBlank(message = "Login cannot be empty")
@@ -24,6 +26,7 @@ public class User {
     private LocalDate birthday;
 
     public User(String email, String login, String name, LocalDate birthday) {
+        this.id = UserController.getUserIdCounter();
         this.email = email;
         this.login = login;
         this.name = checkName(name, login);
