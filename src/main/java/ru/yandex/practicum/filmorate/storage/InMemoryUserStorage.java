@@ -13,14 +13,14 @@ import java.util.Map;
 @Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
-    private final Map<Integer, User> users = new HashMap<>();
-    private static int userIdCounter = 1;
+    private final Map<Long, User> users = new HashMap<>();
+    private static Long userIdCounter = 1L;
 
-    public static int getUserIdCounter() {
+    public static Long getUserIdCounter() {
         return userIdCounter;
     }
 
-    public Map<Integer, User> getUsers() {
+    public Map<Long, User> getUsers() {
         return users;
     }
 

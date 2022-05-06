@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping
-    public Map<Integer, User> getAllUsers() {
+    public Map<Long, User> getAllUsers() {
         return userService.getUsers();
     }
 }

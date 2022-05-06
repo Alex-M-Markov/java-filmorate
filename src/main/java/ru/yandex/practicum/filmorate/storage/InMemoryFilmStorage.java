@@ -13,14 +13,14 @@ import java.util.Map;
 @Slf4j
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
-    private final Map<Integer, Film> films = new HashMap<>();
-    public static int filmIdCounter = 1;
+    private final Map<Long, Film> films = new HashMap<>();
+    public static Long filmIdCounter = 1L;
 
-    public static int getFilmIdCounter() {
+    public static Long getFilmIdCounter() {
         return filmIdCounter;
     }
 
-    public Map<Integer, Film> getFilms() {
+    public Map<Long, Film> getFilms() {
         return films;
     }
 

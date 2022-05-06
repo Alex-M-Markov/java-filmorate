@@ -6,7 +6,10 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -17,7 +20,7 @@ public class UserService {
         this.inMemoryUserStorage = inMemoryUserStorage;
     }
 
-    public Map<Integer, User> getUsers() {
+    public Map<Long, User> getUsers() {
         return inMemoryUserStorage.getUsers();
     }
 
@@ -27,6 +30,60 @@ public class UserService {
 
     public User update(User user) {
         return inMemoryUserStorage.update(user);
+    }
+
+    public void establishFriendship(Long userId, Long friendId) {
+        addToFriends(userId, friendId);
+        addToFriends(friendId, userId);
+    }
+
+    public void addToFriends(Long userId, Long friendId) {
+        User user = getUsers().get(userId);
+        user
+                .getListOfFriends()
+                .add(friendId);
+        update(user);
+    }
+
+    public void cancelFriendship(Long userId, Long friendId) {
+        deleteFromFriends(userId, friendId);
+        deleteFromFriends(friendId, userId);
+    }
+
+    public void deleteFromFriends(Long userId, Long friendId) {
+        if (inMemoryUserStorage.getUsers().containsKey(userId)
+                && inMemoryUserStorage.getUsers().containsKey(friendId)) {
+            User user = getUsers().get(userId);
+            user
+                    .getListOfFriends()
+                    .remove(friendId);
+            update(user);
+        }
+    }
+
+    public List<User> getFriendsList(Long userId) {
+        Map<Long, User> users = inMemoryUserStorage.getUsers();
+        List<User> userFriends = new ArrayList<>();
+        Set<Long> userFriendsId = users.get(userId).getListOfFriends();
+
+        for (Long id : userFriendsId) {
+            userFriends.add(users.get(id));
+        }
+        return userFriends;
+    }
+
+    public List<User> getMutualFriendsList(Long userId, Long friendId) {
+        Map<Long, User> users = inMemoryUserStorage.getUsers();
+        List<User> mutualFriends = new ArrayList<>();
+        Set<Long> userFriendsId = users.get(userId).getListOfFriends();
+        Set<Long> friendsOfFriendId = users.get(friendId).getListOfFriends();
+
+        for (Long id : userFriendsId) {
+            if (friendsOfFriendId.contains(id)) {
+                mutualFriends.add(users.get(id));
+            }
+        }
+        return mutualFriends;
     }
 
 }

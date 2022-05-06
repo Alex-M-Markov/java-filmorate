@@ -18,7 +18,7 @@ import java.util.Set;
 @ToString
 @EqualsAndHashCode
 public class User {
-    private Integer id;
+    private Long id;
     @Email(message = "Use a valid e-mail address")
     private String email;
     @NotBlank(message = "Login cannot be empty")

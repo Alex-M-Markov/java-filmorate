@@ -17,7 +17,7 @@ public class FilmService {
         this.inMemoryFilmStorage = inMemoryFilmStorage;
     }
 
-    public Map<Integer, Film> getFilms() {
+    public Map<Long, Film> getFilms() {
         return inMemoryFilmStorage.getFilms();
     }
 

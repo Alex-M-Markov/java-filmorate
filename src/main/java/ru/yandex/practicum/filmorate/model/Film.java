@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @ToString
 @EqualsAndHashCode
 public class Film {
-    private Integer id;
+    private Long id;
     @NotBlank(message = "Name cannot be empty")
     @Size(max = 200, message = "Name should not exceed 200 symbols")
     private String name;

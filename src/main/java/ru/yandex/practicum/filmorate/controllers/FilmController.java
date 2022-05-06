@@ -29,7 +29,7 @@ public class FilmController {
     }
 
     @GetMapping
-    public Map<Integer, Film> getAllFilms() {
+    public Map<Long, Film> getAllFilms() {
         return filmService.getFilms();
     }
 

@@ -9,5 +9,5 @@ public interface UserStorage {
 
     User update(User user);
 
-    Map<Integer, User> getUsers();
+    Map<Long, User> getUsers();
 }
