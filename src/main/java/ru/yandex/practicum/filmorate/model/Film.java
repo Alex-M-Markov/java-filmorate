@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import ru.yandex.practicum.filmorate.controllers.FilmController;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.validators.CheckFilmDate;
 import ru.yandex.practicum.filmorate.validators.PositiveDuration;
 
@@ -30,8 +30,9 @@ public class Film {
     @PositiveDuration
     private Duration duration;
 
+
     public Film(String name, String description, LocalDate releaseDate, Duration duration) {
-        this.id = FilmController.getFilmIdCounter();
+        this.id = InMemoryFilmStorage.getFilmIdCounter();
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;

@@ -1,47 +1,36 @@
 package ru.yandex.practicum.filmorate.controllers;
 
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.InputMismatchException;
 import java.util.Map;
 
 @RestController
-@Data
-@Slf4j
+@RequestMapping("/films")
 public class FilmController {
-    private final Map<Integer, Film> films = new HashMap<>();
-    public static int filmIdCounter = 1;
+    private final FilmService filmService;
 
-    public static int getFilmIdCounter() {
-        return filmIdCounter;
+    @Autowired
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
     }
 
-    @PostMapping("/films")
+    @PostMapping
     public Film create(@Valid @RequestBody Film film) {
-        log.info("Received request for a new film");
-        films.put(film.getId(), film);
-        filmIdCounter++;
-        return film;
+        return filmService.create(film);
     }
 
-    @PutMapping("/films")
+    @PutMapping
     public Film update(@Valid @RequestBody Film film) {
-        if (!films.containsKey(film.getId())) {
-            throw new InputMismatchException("Entry does not exist");
-        }
-        log.info("Received request for a film update");
-        films.put(film.getId(), film);
-        return film;
+        return filmService.update(film);
     }
 
-    @GetMapping("/films")
+    @GetMapping
     public Map<Integer, Film> getAllFilms() {
-        return this.getFilms();
+        return filmService.getFilms();
     }
 
 }
