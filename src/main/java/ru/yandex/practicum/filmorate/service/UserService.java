@@ -40,7 +40,7 @@ public class UserService {
     public void addToFriends(Long userId, Long friendId) {
         User user = getUsers().get(userId);
         user
-                .getListOfFriends()
+                .getFriends()
                 .add(friendId);
         update(user);
     }
@@ -51,20 +51,17 @@ public class UserService {
     }
 
     public void deleteFromFriends(Long userId, Long friendId) {
-        if (inMemoryUserStorage.getUsers().containsKey(userId)
-                && inMemoryUserStorage.getUsers().containsKey(friendId)) {
-            User user = getUsers().get(userId);
-            user
-                    .getListOfFriends()
-                    .remove(friendId);
-            update(user);
-        }
+        User user = getUsers().get(userId);
+        user
+                .getFriends()
+                .remove(friendId);
+        update(user);
     }
 
     public List<User> getFriendsList(Long userId) {
         Map<Long, User> users = inMemoryUserStorage.getUsers();
         List<User> userFriends = new ArrayList<>();
-        Set<Long> userFriendsId = users.get(userId).getListOfFriends();
+        Set<Long> userFriendsId = users.get(userId).getFriends();
 
         for (Long id : userFriendsId) {
             userFriends.add(users.get(id));
@@ -75,8 +72,8 @@ public class UserService {
     public List<User> getMutualFriendsList(Long userId, Long friendId) {
         Map<Long, User> users = inMemoryUserStorage.getUsers();
         List<User> mutualFriends = new ArrayList<>();
-        Set<Long> userFriendsId = users.get(userId).getListOfFriends();
-        Set<Long> friendsOfFriendId = users.get(friendId).getListOfFriends();
+        Set<Long> userFriendsId = users.get(userId).getFriends();
+        Set<Long> friendsOfFriendId = users.get(friendId).getFriends();
 
         for (Long id : userFriendsId) {
             if (friendsOfFriendId.contains(id)) {

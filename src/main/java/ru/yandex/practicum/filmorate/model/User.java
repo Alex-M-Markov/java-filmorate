@@ -26,7 +26,7 @@ public class User {
     private String name;
     @Past(message = "Birthday should be in the past")
     private LocalDate birthday;
-    private Set<Long> listOfFriends;
+    private Set<Long> friends;
 
     public User(String email, String login, String name, LocalDate birthday) {
         this.id = InMemoryUserStorage.getUserIdCounter();
@@ -34,7 +34,7 @@ public class User {
         this.login = login;
         this.name = checkName(name, login);
         this.birthday = birthday;
-        this.listOfFriends = new HashSet<>();
+        this.friends = new HashSet<>();
     }
 
     private String checkName(String name, String login) {

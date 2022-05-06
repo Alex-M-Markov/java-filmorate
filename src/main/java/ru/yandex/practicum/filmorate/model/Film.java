@@ -13,6 +13,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -29,6 +31,7 @@ public class Film {
     private LocalDate releaseDate;
     @PositiveDuration
     private Duration duration;
+    private Set<Long> likes;
 
 
     public Film(String name, String description, LocalDate releaseDate, Duration duration) {
@@ -37,5 +40,6 @@ public class Film {
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
+        this.likes = new HashSet<>();
     }
 }
