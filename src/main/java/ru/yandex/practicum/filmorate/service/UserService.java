@@ -20,8 +20,8 @@ public class UserService {
         this.inMemoryUserStorage = inMemoryUserStorage;
     }
 
-    public Map<Long, User> getUsers() {
-        return inMemoryUserStorage.getUsers();
+    public List <User> getUsers() {
+        return new ArrayList<>(inMemoryUserStorage.getUsers().values());
     }
 
     public User create(User user) {
@@ -38,7 +38,7 @@ public class UserService {
     }
 
     public void establishFriendship(Long id, Long friendId) {
-        User user = getUsers().get(id);
+        User user = inMemoryUserStorage.getUsers().get(id);
         user
                 .getFriends()
                 .add(friendId);
@@ -51,7 +51,7 @@ public class UserService {
     }
 
     public void cancelFriendship(Long id, Long friendId) {
-        User user = getUsers().get(id);
+        User user = inMemoryUserStorage.getUsers().get(id);
         user
                 .getFriends()
                 .remove(friendId);

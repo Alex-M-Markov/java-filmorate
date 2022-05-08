@@ -6,6 +6,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,8 +20,8 @@ public class FilmService {
         this.inMemoryFilmStorage = inMemoryFilmStorage;
     }
 
-    public Map<Long, Film> getFilms() {
-        return inMemoryFilmStorage.getFilms();
+    public List<Film> getFilms() {
+        return new ArrayList<>(inMemoryFilmStorage.getFilms().values());
     }
 
     public Film create(Film Film) {
@@ -32,7 +33,7 @@ public class FilmService {
     }
 
     public void addLike(Long id, Long userId) {
-        Film film = getFilms().get(id);
+        Film film = inMemoryFilmStorage.getFilms().get(id);
         film
                 .getLikes()
                 .add(userId);
@@ -40,7 +41,7 @@ public class FilmService {
     }
 
     public void deleteLike(Long id, Long userId) {
-        Film film = getFilms().get(id);
+        Film film = inMemoryFilmStorage.getFilms().get(id);
         film
                 .getLikes()
                 .remove(userId);
@@ -53,7 +54,7 @@ public class FilmService {
                 .sorted((p0, p1) -> {
                     Integer firstFilmLikes = p0.getLikes().size();
                     Integer secondFilmLikes = p1.getLikes().size();
-                    return firstFilmLikes.compareTo(secondFilmLikes);
+                    return secondFilmLikes.compareTo(firstFilmLikes);
                 })
                 .limit(count)
                 .collect(Collectors.toList());
