@@ -38,31 +38,31 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
-        checkInputService.checkInput(id);
+        checkInputService.checkInput("User", id);
         return userService.getUserById(id);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
     public void addToFriends(@PathVariable Long id, @PathVariable Long friendId) {
-        checkInputService.checkInput(id, friendId);
+        checkInputService.checkInput("User", id, friendId);
         userService.addToFriends(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
     public void deleteFromFriends(@PathVariable Long id, @PathVariable Long friendId) {
-        checkInputService.checkInput(id, friendId);
+        checkInputService.checkInput("User", id, friendId);
         userService.deleteFromFriends(id, friendId);
     }
 
     @GetMapping("{id}/friends")
     public List<User> getFriendsList(@PathVariable Long id) {
-        checkInputService.checkInput(id);
+        checkInputService.checkInput("User", id);
         return userService.getFriendsList(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
     public List<User> getMutualFriendsList(@PathVariable Long id, @PathVariable Long otherId) {
-        checkInputService.checkInput(id, otherId);
+        checkInputService.checkInput("User", id, otherId);
         return userService.getMutualFriendsList(id, otherId);
     }
 
