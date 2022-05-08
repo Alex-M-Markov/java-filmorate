@@ -32,9 +32,9 @@ public class UserService {
         return inMemoryUserStorage.update(user);
     }
 
-    public void addToFriends(Long userId, Long friendId) {
-        establishFriendship(userId, friendId);
-        establishFriendship(friendId, userId);
+    public void addToFriends(Long id, Long friendId) {
+        establishFriendship(id, friendId);
+        establishFriendship(friendId, id);
     }
 
     public void establishFriendship(Long id, Long friendId) {
