@@ -31,16 +31,16 @@ public class FilmService {
         return inMemoryFilmStorage.update(Film);
     }
 
-    public void addLike(Long filmId, Long userId) {
-        Film film = getFilms().get(filmId);
+    public void addLike(Long id, Long userId) {
+        Film film = getFilms().get(id);
         film
                 .getLikes()
                 .add(userId);
         update(film);
     }
 
-    public void deleteLike(Long filmId, Long userId) {
-        Film film = getFilms().get(filmId);
+    public void deleteLike(Long id, Long userId) {
+        Film film = getFilms().get(id);
         film
                 .getLikes()
                 .remove(userId);
@@ -57,6 +57,10 @@ public class FilmService {
                 })
                 .limit(count)
                 .collect(Collectors.toList());
+    }
+
+    public Film getFilmById(Long id) {
+        return inMemoryFilmStorage.getFilms().get(id);
     }
 
 }
