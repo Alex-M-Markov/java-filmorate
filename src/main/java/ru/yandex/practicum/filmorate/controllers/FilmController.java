@@ -1,47 +1,65 @@
 package ru.yandex.practicum.filmorate.controllers;
 
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.CheckInputService;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Map;
+import java.util.List;
+import java.util.Objects;
 
 @RestController
-@Data
-@Slf4j
+@RequestMapping("/films")
 public class FilmController {
-    private final Map<Integer, Film> films = new HashMap<>();
-    public static int filmIdCounter = 1;
+    private final FilmService filmService;
+    private final CheckInputService checkInputService;
+    private static final int TEN_MOST_POPULAR_FILMS = 10;
+    private static final String NAME_OF_FILM_ENTITY_FOR_CHECKING = "Film";
 
-    public static int getFilmIdCounter() {
-        return filmIdCounter;
+    @Autowired
+    public FilmController(FilmService filmService, CheckInputService checkInputService) {
+        this.filmService = filmService;
+        this.checkInputService = checkInputService;
     }
 
-    @PostMapping("/films")
+    @PostMapping
     public Film create(@Valid @RequestBody Film film) {
-        log.info("Received request for a new film");
-        films.put(film.getId(), film);
-        filmIdCounter++;
-        return film;
+        return filmService.create(film);
     }
 
-    @PutMapping("/films")
+    @PutMapping
     public Film update(@Valid @RequestBody Film film) {
-        if (!films.containsKey(film.getId())) {
-            throw new InputMismatchException("Entry does not exist");
-        }
-        log.info("Received request for a film update");
-        films.put(film.getId(), film);
-        return film;
+        return filmService.update(film);
     }
 
-    @GetMapping("/films")
-    public Map<Integer, Film> getAllFilms() {
-        return this.getFilms();
+    @GetMapping
+    public List<Film> getAllFilms() {
+        return filmService.getFilms();
+    }
+
+    @GetMapping("/{id}")
+    public Film getFilmById(@PathVariable Long id) {
+        checkInputService.checkInput(NAME_OF_FILM_ENTITY_FOR_CHECKING, id);
+        return filmService.getFilmById(id);
+    }
+
+    @PutMapping("/{id}/like/{userId}")
+    public void addLike(@PathVariable Long id, @PathVariable Long userId) {
+        checkInputService.checkInput(NAME_OF_FILM_ENTITY_FOR_CHECKING, id, userId);
+        filmService.addLike(id, userId);
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    public void deleteLike(@PathVariable Long id, @PathVariable Long userId) {
+        checkInputService.checkInput(NAME_OF_FILM_ENTITY_FOR_CHECKING, id, userId);
+        filmService.deleteLike(id, userId);
+    }
+
+    @GetMapping("/popular")
+    public List<Film> getTopRatedFilms(@RequestParam(required = false) Integer count) {
+        return filmService.getTopRatedFilms(Objects.requireNonNullElse(count, TEN_MOST_POPULAR_FILMS));
     }
 
 }

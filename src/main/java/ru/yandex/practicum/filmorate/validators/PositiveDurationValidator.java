@@ -2,12 +2,11 @@ package ru.yandex.practicum.filmorate.validators;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.time.Duration;
 
-public class PositiveDurationValidator implements ConstraintValidator<PositiveDuration, Duration> {
+public class PositiveDurationValidator implements ConstraintValidator<PositiveDuration, Integer> {
 
     @Override
-    public boolean isValid(Duration duration, ConstraintValidatorContext context) {
-        return !duration.isNegative();
+    public boolean isValid(Integer duration, ConstraintValidatorContext context) {
+        return duration >= 0;
     }
 }
