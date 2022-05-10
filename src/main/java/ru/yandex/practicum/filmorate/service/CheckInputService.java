@@ -1,15 +1,10 @@
 package ru.yandex.practicum.filmorate.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.IllegalInputException;
 
 @Service
 public class CheckInputService {
-
-    @Autowired
-    public CheckInputService() {
-    }
 
     public void checkInput(String type, Long... id) {
         if (type.equals("User")) {

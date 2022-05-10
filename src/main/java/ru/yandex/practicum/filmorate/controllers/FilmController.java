@@ -15,7 +15,8 @@ import java.util.Objects;
 public class FilmController {
     private final FilmService filmService;
     private final CheckInputService checkInputService;
-    public static final int TEN_MOST_POPULAR_FILMS = 10;
+    private static final int TEN_MOST_POPULAR_FILMS = 10;
+    private static final String NAME_OF_FILM_ENTITY_FOR_CHECKING = "Film";
 
     @Autowired
     public FilmController(FilmService filmService, CheckInputService checkInputService) {
@@ -40,19 +41,19 @@ public class FilmController {
 
     @GetMapping("/{id}")
     public Film getFilmById(@PathVariable Long id) {
-        checkInputService.checkInput("Film", id);
+        checkInputService.checkInput(NAME_OF_FILM_ENTITY_FOR_CHECKING, id);
         return filmService.getFilmById(id);
     }
 
     @PutMapping("/{id}/like/{userId}")
     public void addLike(@PathVariable Long id, @PathVariable Long userId) {
-        checkInputService.checkInput("Film", id, userId);
+        checkInputService.checkInput(NAME_OF_FILM_ENTITY_FOR_CHECKING, id, userId);
         filmService.addLike(id, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
     public void deleteLike(@PathVariable Long id, @PathVariable Long userId) {
-        checkInputService.checkInput("Film", id, userId);
+        checkInputService.checkInput(NAME_OF_FILM_ENTITY_FOR_CHECKING, id, userId);
         filmService.deleteLike(id, userId);
     }
 

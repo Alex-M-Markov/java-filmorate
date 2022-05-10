@@ -20,7 +20,7 @@ public class UserService {
         this.inMemoryUserStorage = inMemoryUserStorage;
     }
 
-    public List <User> getUsers() {
+    public List<User> getUsers() {
         return new ArrayList<>(inMemoryUserStorage.getUsers().values());
     }
 
@@ -39,9 +39,7 @@ public class UserService {
 
     public void establishFriendship(Long id, Long friendId) {
         User user = inMemoryUserStorage.getUsers().get(id);
-        user
-                .getFriends()
-                .add(friendId);
+        user.getFriends().add(friendId);
         update(user);
     }
 
@@ -52,9 +50,7 @@ public class UserService {
 
     public void cancelFriendship(Long id, Long friendId) {
         User user = inMemoryUserStorage.getUsers().get(id);
-        user
-                .getFriends()
-                .remove(friendId);
+        user.getFriends().remove(friendId);
         update(user);
     }
 
