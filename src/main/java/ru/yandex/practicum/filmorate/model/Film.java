@@ -26,6 +26,7 @@ public class Film {
     private String name;
     @NotNull
     @NotBlank
+    @Size(max = 200, message = "Description should not exceed 200 symbols")
     private String description;
     @NotNull
     @CheckFilmDate

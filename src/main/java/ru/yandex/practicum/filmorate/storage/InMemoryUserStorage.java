@@ -3,10 +3,10 @@ package ru.yandex.practicum.filmorate.storage;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exceptions.IllegalInputException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.HashMap;
-import java.util.InputMismatchException;
 import java.util.Map;
 
 @Data
@@ -33,7 +33,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     public User update(User user) {
         if (!users.containsKey(user.getId())) {
-            throw new InputMismatchException("Entry does not exist");
+            throw new IllegalInputException("Entry does not exist");
         }
         log.info("Received request for a user update");
         users.put(user.getId(), user);
