@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.storage;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exceptions.IllegalInputException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.HashMap;
@@ -33,7 +34,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     public Film update(Film film) {
         if (!films.containsKey(film.getId())) {
-            throw new InputMismatchException("Entry does not exist");
+            throw new IllegalInputException("Entry does not exist");
         }
         log.info("Received request for a film update");
         films.put(film.getId(), film);
