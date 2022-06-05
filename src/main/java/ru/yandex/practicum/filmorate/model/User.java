@@ -4,35 +4,39 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
 public class User {
+
     private Long id;
-    @Email(message = "Use a valid e-mail address")
-    private String email;
     @NotBlank(message = "Login cannot be empty")
-    private final String login;
+    @Size(max = 50, message = "Login should not exceed 50 symbols")
+    private String login;
+    @Size(max = 100, message = "Name should not exceed 100 symbols")
     private String name;
+    @Email(message = "Use a valid e-mail address")
+    @Size(max = 50, message = "E-mail should not exceed 50 symbols")
+    private String email;
     @Past(message = "Birthday should be in the past")
     private LocalDate birthday;
-    private Set<Long> friends;
+    private HashSet<Friendship> friends;
 
-    public User(String email, String login, String name, LocalDate birthday) {
-        this.id = InMemoryUserStorage.getUserIdCounter();
-        this.email = email;
+
+    public User(String login, String name, String email, LocalDate birthday) {
+        this.id = 1L;
         this.login = login;
         this.name = checkName(name, login);
+        this.email = email;
         this.birthday = birthday;
         this.friends = new HashSet<>();
     }
@@ -45,5 +49,3 @@ public class User {
     }
 
 }
-
-

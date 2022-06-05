@@ -2,66 +2,51 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exceptions.IllegalInputException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
-    private final FilmStorage inMemoryFilmStorage;
+
+    private final FilmStorage filmStorage;
 
     @Autowired
-    public FilmService(InMemoryFilmStorage inMemoryFilmStorage) {
-        this.inMemoryFilmStorage = inMemoryFilmStorage;
+    public FilmService(FilmStorage filmStorage) {
+        this.filmStorage = filmStorage;
     }
 
     public List<Film> getFilms() {
-        return new ArrayList<>(inMemoryFilmStorage.getFilms().values());
-    }
-
-    public Film create(Film Film) {
-        return inMemoryFilmStorage.create(Film);
-    }
-
-    public Film update(Film Film) {
-        return inMemoryFilmStorage.update(Film);
-    }
-
-    public void addLike(Long id, Long userId) {
-        Film film = inMemoryFilmStorage.getFilms().get(id);
-        film
-                .getLikes()
-                .add(userId);
-        update(film);
-    }
-
-    public void deleteLike(Long id, Long userId) {
-        Film film = inMemoryFilmStorage.getFilms().get(id);
-        film
-                .getLikes()
-                .remove(userId);
-        update(film);
-    }
-
-    public List<Film> getTopRatedFilms(Integer count) {
-        Map<Long, Film> films = inMemoryFilmStorage.getFilms();
-        return films.values().stream()
-                .sorted((p0, p1) -> {
-                    Integer firstFilmLikes = p0.getLikes().size();
-                    Integer secondFilmLikes = p1.getLikes().size();
-                    return secondFilmLikes.compareTo(firstFilmLikes);
-                })
-                .limit(count)
-                .collect(Collectors.toList());
+        return filmStorage.getAllFilms();
     }
 
     public Film getFilmById(Long id) {
-        return inMemoryFilmStorage.getFilms().get(id);
+        return filmStorage.getFilmById(id);
+    }
+
+    public Film create(Film film) {
+        return filmStorage.create(film);
+    }
+
+    public Film update(Film film) {
+        if (film.getId() <= 0) {
+            throw new IllegalInputException("id is negative");
+        }
+        return filmStorage.update(film);
+    }
+
+    public void addLike(Long id, Long userId) {
+        filmStorage.addLike(id, userId);
+    }
+
+    public void deleteLike(Long id, Long userId) {
+        filmStorage.deleteLike(id, userId);
+    }
+
+    public List<Film> getTopRatedFilms(Integer count) {
+        return filmStorage.getTopRatedFilms(count);
     }
 
 }

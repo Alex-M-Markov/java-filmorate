@@ -1,0 +1,44 @@
+Film as f # Table documentation comment 2
+------------
+Film_ID bigint PK
+Name varchar(200) 
+Description varchar(200) 
+Release_Date date
+Duration int
+Mpa_ID int FK >- mpa.Mpa_ID
+
+Users as u
+------------
+User_ID bigint PK 
+Login varchar(50)
+Name varchar(100)
+Email varchar(50)
+Birth_Date date
+
+Film_User_Likes as ful
+------------
+Film_ID bigint PK FK >- f.Film_ID
+User_ID bigint PK FK >- u.User_ID
+
+Genre as g
+------------
+Genre_ID int
+Name varchar(50)
+
+MPA_Rating as mpa
+------------
+Mpa_ID PK
+Short_Name varchar(10)
+Name varchar(50)
+Description varchar(300)
+
+Friendship as fr
+------------
+User_ID bigint PK FK >- u.User_ID
+Friend_ID bigint PK FK >- u.User_ID
+Approved boolean
+
+Film_Genre as fg
+------------
+Film_ID bigint PK FK >- f.Film_ID
+Genre_ID int PK FK >- g.Genre_ID
