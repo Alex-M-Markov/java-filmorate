@@ -2,85 +2,61 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exceptions.IllegalInputException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @Service
 public class UserService {
-    private final UserStorage inMemoryUserStorage;
+
+    private final UserStorage userStorage;
 
     @Autowired
-    public UserService(InMemoryUserStorage inMemoryUserStorage) {
-        this.inMemoryUserStorage = inMemoryUserStorage;
+    public UserService(UserStorage userStorage) {
+        this.userStorage = userStorage;
     }
 
-    public List<User> getUsers() {
-        return new ArrayList<>(inMemoryUserStorage.getUsers().values());
-    }
 
-    public User create(User user) {
-        return inMemoryUserStorage.create(user);
-    }
-
-    public User update(User user) {
-        return inMemoryUserStorage.update(user);
-    }
-
-    public void addToFriends(Long id, Long friendId) {
-        establishFriendship(id, friendId);
-        establishFriendship(friendId, id);
-    }
-
-    public void establishFriendship(Long id, Long friendId) {
-        User user = inMemoryUserStorage.getUsers().get(id);
-        user.getFriends().add(friendId);
-        update(user);
-    }
-
-    public void deleteFromFriends(Long id, Long friendId) {
-        cancelFriendship(id, friendId);
-        cancelFriendship(friendId, id);
-    }
-
-    public void cancelFriendship(Long id, Long friendId) {
-        User user = inMemoryUserStorage.getUsers().get(id);
-        user.getFriends().remove(friendId);
-        update(user);
-    }
-
-    public List<User> getFriendsList(Long id) {
-        Map<Long, User> users = inMemoryUserStorage.getUsers();
-        List<User> userFriends = new ArrayList<>();
-        Set<Long> userFriendsId = users.get(id).getFriends();
-
-        for (Long friend : userFriendsId) {
-            userFriends.add(users.get(friend));
-        }
-        return userFriends;
-    }
-
-    public List<User> getMutualFriendsList(Long id, Long friendId) {
-        Map<Long, User> users = inMemoryUserStorage.getUsers();
-        List<User> mutualFriends = new ArrayList<>();
-        Set<Long> userFriendsId = users.get(id).getFriends();
-        Set<Long> friendsOfFriendId = users.get(friendId).getFriends();
-
-        for (Long friend : userFriendsId) {
-            if (friendsOfFriendId.contains(friend)) {
-                mutualFriends.add(users.get(friend));
-            }
-        }
-        return mutualFriends;
+    public Collection<User> getUsers() {
+        return userStorage.getAllUsers();
     }
 
     public User getUserById(Long id) {
-        return inMemoryUserStorage.getUsers().get(id);
+        return userStorage.getUserById(id);
+    }
+
+    public User create(User user) {
+        return userStorage.create(user);
+    }
+
+    public User update(User user) {
+        if (user.getId() <= 0) {
+            throw new IllegalInputException("id is negative");
+        }
+        return userStorage.update(user);
+    }
+
+    public void sendFriendshipRequest(Long userId, Long friendId) {
+        userStorage.sendFriendshipRequest(userId, friendId);
+    }
+
+    public void approveFriendshipRequest(Long userId, Long friendId) {
+        userStorage.approveFriendshipRequest(userId, friendId);
+    }
+
+    public void deleteFromFriends(Long userId, Long friendId) {
+        userStorage.deleteFromFriends(userId, friendId);
+    }
+
+    public List<User> getFriendsList(Long userId) {
+        return userStorage.getFriendsList(userId);
+    }
+
+    public List<User> getMutualFriendsList(Long userId, Long friendId) {
+        return userStorage.getMutualFriendsList(userId, friendId);
     }
 
 }

@@ -13,6 +13,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
+
     private final FilmService filmService;
     private final CheckInputService checkInputService;
     private static final int TEN_MOST_POPULAR_FILMS = 10;
@@ -59,7 +60,8 @@ public class FilmController {
 
     @GetMapping("/popular")
     public List<Film> getTopRatedFilms(@RequestParam(required = false) Integer count) {
-        return filmService.getTopRatedFilms(Objects.requireNonNullElse(count, TEN_MOST_POPULAR_FILMS));
+        return filmService.getTopRatedFilms(
+                Objects.requireNonNullElse(count, TEN_MOST_POPULAR_FILMS));
     }
 
 }

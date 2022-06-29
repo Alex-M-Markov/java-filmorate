@@ -5,7 +5,7 @@ You can choose them by name, genre, release date, rating or many other features.
 
 *If you are interested in the database chart, please have a look at the image below:*
 
-![Database Chart](src/main/resources/database/FilmorateDatabaseChart.png)
+![Database Chart](src/main/resources/databaseChart.png)
 
 *You can use SQL requests to get all information needed.*
 
