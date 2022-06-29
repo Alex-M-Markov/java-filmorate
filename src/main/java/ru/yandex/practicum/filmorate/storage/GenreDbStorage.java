@@ -16,10 +16,10 @@ public class GenreDbStorage implements GenreStorage {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public static final String GET_ALL_GENRES = "select * from Genre " +
+    private static final String GET_ALL_GENRES = "select * from Genre " +
             "ORDER BY GENRE_ID";
 
-    public static final String GET_GENRE = "select * from Genre "
+    private static final String GET_GENRE = "select * from Genre "
             + "where GENRE_ID = ?";
 
     @Autowired

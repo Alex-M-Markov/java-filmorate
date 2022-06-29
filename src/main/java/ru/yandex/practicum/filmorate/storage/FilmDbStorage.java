@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.exceptions.IllegalInputException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,44 +21,44 @@ public class FilmDbStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;
     private final MpaStorage mpaStorage;
-    public static final String CREATE_FILM = "insert into FILMS (NAME, DESCRIPTION, "
+    private static final String CREATE_FILM = "insert into FILMS (NAME, DESCRIPTION, "
             + "RELEASE_DATE, DURATION, MPA_ID)"
             + "values (?, ?, ?, ?, ?)";
 
-    public static final String UPDATE_FILM = "update FILMS set NAME = ?, DESCRIPTION = ?, "
+    private static final String UPDATE_FILM = "update FILMS set NAME = ?, DESCRIPTION = ?, "
             + "RELEASE_DATE = ?, DURATION = ?, MPA_ID = ? "
             + "where FILM_ID = ?";
-    public static final String GET_ALL_FILMS = "select * from FILMS";
+    private static final String GET_ALL_FILMS = "select * from FILMS";
 
-    public static final String GET_FILM = "select * from FILMS "
+    private static final String GET_FILM = "select * from FILMS "
             + "where FILM_ID = ?";
 
-    public static final String GET_FILM_ID_BY_NAME = "select Film_ID from Films " +
+    private static final String GET_FILM_ID_BY_NAME = "select Film_ID from Films " +
             "where Name = ?";
 
-    public static final String SAVE_FILM_GENRE = "insert into FILM_GENRE (FILM_ID, GENRE_ID)"
+    private static final String SAVE_FILM_GENRE = "insert into FILM_GENRE (FILM_ID, GENRE_ID)"
             + "values (?, ?)";
 
-    public static final String DELETE_ALL_FILM_GENRES = "delete from FILM_GENRE "
+    private static final String DELETE_ALL_FILM_GENRES = "delete from FILM_GENRE "
             + "where FILM_ID = ?";
 
-    public static final String SELECT_GENRES_OF_FILM = "select distinct fg.GENRE_ID, g.NAME "
+    private static final String SELECT_GENRES_OF_FILM = "select distinct fg.GENRE_ID, g.NAME "
             + "from FILM_GENRE as fg "
             + "left join GENRE as g on fg.GENRE_ID = g.GENRE_ID "
             + "where fg.FILM_ID = ? "
             + "order by fg.GENRE_ID";
 
-    public static final String SELECT_LIKES_OF_FILM = "select distinct ful.USER_ID "
+    private static final String SELECT_LIKES_OF_FILM = "select distinct ful.USER_ID "
             + "from FILM_USER_LIKES as ful "
             + "where ful.Film_ID = ?";
 
-    public static final String ADD_LIKE = "insert into FILM_USER_LIKES (FILM_ID, USER_ID)"
+    private static final String ADD_LIKE = "insert into FILM_USER_LIKES (FILM_ID, USER_ID)"
             + "values (?, ?)";
 
-    public static final String DELETE_LIKE = "delete from FILM_USER_LIKES "
+    private static final String DELETE_LIKE = "delete from FILM_USER_LIKES "
             + "where FILM_ID = ? and USER_ID = ?";
 
-    public static final String GET_TOP_RATED_FILMS = "select * from FILMS as f "
+    private static final String GET_TOP_RATED_FILMS = "select * from FILMS as f "
             + "left join FILM_USER_LIKES as ful on ful.FILM_ID = f.FILM_ID "
             + "group by f.FILM_ID, ful.user_id "
             + "order by count(ful.FILM_ID) desc "

@@ -16,10 +16,10 @@ public class MpaDbStorage implements MpaStorage {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public static final String GET_ALL_MPAS = "select * from MPA_Rating";
+    private static final String GET_ALL_MPAS = "select * from MPA_Rating";
 
-    public static final String GET_MPA = "select * from MPA_Rating "
-        + "where Mpa_ID = ?";
+    private static final String GET_MPA = "select * from MPA_Rating "
+            + "where Mpa_ID = ?";
 
     @Autowired
     public MpaDbStorage(JdbcTemplate jdbcTemplate) {
@@ -29,19 +29,19 @@ public class MpaDbStorage implements MpaStorage {
     @Override
     public List<Mpa> getAllMpas() {
         return jdbcTemplate.query(GET_ALL_MPAS, (rs, rowNum) -> new Mpa(
-                rs.getInt("Mpa_ID"),
-                rs.getString("Short_Name")
-            )
+                        rs.getInt("Mpa_ID"),
+                        rs.getString("Short_Name")
+                )
         );
     }
 
     @Override
     public Optional<Mpa> getMpa(Integer mpaId) {
         return jdbcTemplate.query(GET_MPA, (rs, rowNum) ->
-            new Mpa(
-                rs.getInt("Mpa_ID"),
-                rs.getString("Short_Name")
-            ), mpaId
+                new Mpa(
+                        rs.getInt("Mpa_ID"),
+                        rs.getString("Short_Name")
+                ), mpaId
         ).stream().findAny();
     }
 

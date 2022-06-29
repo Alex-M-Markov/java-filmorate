@@ -21,38 +21,38 @@ import java.util.stream.Collectors;
 public class UserDbStorage implements UserStorage {
 
     private final JdbcTemplate jdbcTemplate;
-    public static final String CREATE_USER = "insert into Users (Login, Name, Email, "
+    private static final String CREATE_USER = "insert into Users (Login, Name, Email, "
             + "Birth_Date)"
             + "values (?, ?, ?, ?)";
-    public static final String UPDATE_USER = "update Users set Login = ?, Name = ?, Email = ?, "
+    private static final String UPDATE_USER = "update Users set Login = ?, Name = ?, Email = ?, "
             + "Birth_Date = ? "
             + "where User_ID = ?";
-    public static final String GET_ALL_USERS = "select * from Users";
+    private static final String GET_ALL_USERS = "select * from Users";
 
-    public static final String GET_USER = "select * from Users "
+    private static final String GET_USER = "select * from Users "
             + "where User_ID = ?";
 
-    public static final String GET_USER_ID_BY_LOGIN = "select User_ID from Users " +
+    private static final String GET_USER_ID_BY_LOGIN = "select User_ID from Users " +
             "where Login = ?";
 
-    public static final String ADD_FRIENDSHIP = "insert into Friendship (User_ID, Friend_ID, "
+    private static final String ADD_FRIENDSHIP = "insert into Friendship (User_ID, Friend_ID, "
             + "Approval)"
             + "values (?, ?, ?)";
 
-    public static final String UPDATE_FRIENDSHIP = "update Friendship set User_ID = ?, "
+    private static final String UPDATE_FRIENDSHIP = "update Friendship set User_ID = ?, "
             + "Friend_ID = ?, Approval = ? "
             + "where User_ID = ? AND Friend_ID = ?";
 
-    public static final String SELECT_FRIENDSHIPS_OF_USER = "select u.User_ID, f.Friend_ID, "
+    private static final String SELECT_FRIENDSHIPS_OF_USER = "select u.User_ID, f.Friend_ID, "
             + "f.Approval "
             + "from Users as u "
             + "left join Friendship as f on f.User_ID = u.User_ID "
             + "where u.User_ID = ? and f.Friend_ID > 0";
 
-    public static final String DELETE_FRIENDSHIP = "delete from Friendship "
+    private static final String DELETE_FRIENDSHIP = "delete from Friendship "
             + "where User_ID = ? and Friend_ID = ?";
 
-    public static final String DELETE_ALL_FRIENDSHIPS = "delete from Friendship "
+    private static final String DELETE_ALL_FRIENDSHIPS = "delete from Friendship "
             + "where User_ID = ?";
 
     @Autowired
@@ -101,12 +101,10 @@ public class UserDbStorage implements UserStorage {
     @Override
     public List<User> getAllUsers() {
         return jdbcTemplate.query(GET_ALL_USERS, (rs, rowNum) -> new User(
-                        /*  rs.getLong("User_ID"),*/
                         rs.getString("Login"),
                         rs.getString("Name"),
                         rs.getString("Email"),
-                        rs.getDate("Birth_Date").toLocalDate()/*,
-                        selectFriendship(rs.getLong("User_ID"))*/
+                        rs.getDate("Birth_Date").toLocalDate()
                 )
         );
     }
@@ -176,7 +174,6 @@ public class UserDbStorage implements UserStorage {
     public List<User> getFriendsList(Long userId) {
         Set<Friendship> friendships = selectFriendship(userId);
         return friendships.stream()
-                /*.filter(Friendship::isApproved)*/
                 .map(Friendship::getFriendId)
                 .map(this::getUserById)
                 .collect(Collectors.toList());
@@ -187,10 +184,8 @@ public class UserDbStorage implements UserStorage {
         Set<Friendship> friendships = selectFriendship(userId);
         Set<Friendship> friendshipsOfFriend = selectFriendship(friendId);
         return friendships.stream()
-                /* .filter(Friendship::isApproved)*/
                 .map(Friendship::getFriendId)
                 .filter(x -> friendshipsOfFriend.stream()
-                        /*   .filter(Friendship::isApproved)*/
                         .map(Friendship::getFriendId)
                         .collect(Collectors.toList()).contains(x))
                 .map(this::getUserById)

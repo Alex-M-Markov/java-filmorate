@@ -1,7 +1,5 @@
 package ru.yandex.practicum.filmorate;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,8 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -81,16 +81,6 @@ class UserDbStorageTests {
         assertThat(friendshipList).contains((new Friendship(userStorage.getUserById(1L).getId(),
                 userStorage.getUserById(2L).getId(), false)));
     }
-/*
-    @Test
-    public void approveFriendshipRequest() {
-        userStorage.create(returnUser1ForTesting());
-        userStorage.create(returnUser2ForTesting());
-        userStorage.sendFriendshipRequest(5L, 6L);
-        userStorage.approveFriendshipRequest(6L, 5L);
-        HashSet<Friendship> friendshipList = userStorage.getUserById(5L).getFriends();
-        assertThat(friendshipList).contains((new Friendship(5L, 6L, true)));
-    }*/
 
     @Test
     public void getFriendsList() {
